@@ -11,5 +11,25 @@
             <Font name="System Bold" size="14.0" />
          </font>
       </Button>
+      <Button fx:id="btncalculadora" layoutX="79.0" layoutY="160.0" mnemonicParsing="false" onAction="#abrirCalculadoraIMC" prefHeight="26.0" prefWidth="201.0" text="CALCULADORAIMC">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Button>
+      <Button fx:id="jogocarro" layoutX="79.0" layoutY="203.0" mnemonicParsing="false" onAction="#abrirGame" prefHeight="26.0" prefWidth="201.0" text="jogo">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Button>
+      <Button fx:id="btncalcularmedia" layoutX="79.0" layoutY="249.0" mnemonicParsing="false" onAction="#btncalcularmedia" prefHeight="26.0" prefWidth="201.0" text="CALCULARMEDIA">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Button>
+      <Button fx:id="btnCalcularIdade" layoutX="79.0" layoutY="300.0" mnemonicParsing="false" onAction="#btnCalcularIdade" prefHeight="26.0" prefWidth="201.0" text="CALCULAR IDADE">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Button>
    </children>
 </AnchorPane>

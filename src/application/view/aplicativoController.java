@@ -44,7 +44,30 @@ public class aplicativoController {
     private void abrirCalculadora() {
         carregarTela("calculos.fxml");
     }
-
+    
+    @FXML
+    private void abrirCalculadoraIMC() {
+        carregarTela("calculadoraimc.fxml");
+    }
+    
+    @FXML
+    private void abrirGame() {
+    	carregarTela("jogo.fxml");
+    }
+    
+    @FXML
+    private void abrirGameCarro() {
+    	carregarTela("jogocarro.fxml");
+    }
+    
+    @FXML
+    private void btncalcularmedia() {
+    	carregarTela("calcularmedia.fxml");
+    }
+    @FXML
+    private void btnCalcularIdade() {
+    	carregarTela("calcularidade.fxml");
+    }
     @FXML
     private void initialize() {
         // abrirPaginaInicial(); // Descomente se quiser carregar a tela inicial automaticamente

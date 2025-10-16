@@ -24,5 +24,6 @@
             <Font name="System Bold" size="25.0" />
          </font>
       </Label>
+      <Button fx:id="btnReset" layoutX="123.0" layoutY="552.0" mnemonicParsing="false" text="RESET" />
    </children>
 </AnchorPane>

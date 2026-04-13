@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane prefHeight="500.0" prefWidth="800.0"
+    xmlns="http://javafx.com/javafx/25"
+    xmlns:fx="http://javafx.com/fxml/1"
+    fx:controller="application.view.SistemaController">
+
+    <!-- TOPO -->
+    <top>
+        <VBox>
+            <MenuBar>
+                <menus>
+                    <Menu text="Inicio">
+                        <items>
+                            <MenuItem fx:id="itemSair" onAction="#Sair" text="Sair"/>
+                        </items>
+                    </Menu>
+
+                    <Menu text="Cadastros">
+                        <items>
+                            <MenuItem fx:id="itemProdutos" onAction="#AbrirCadastroProduto" text="Produtos"/>
+                            <MenuItem fx:id="itemUsuario" onAction="#AbrirCadastroUsuarios" text="Usuários"/>
+                            <MenuItem fx:id="itemCliente" onAction="#AbrirCadastroClientes" text="Clientes"/>
+                        </items>
+                    </Menu>
+
+                    <Menu text="Operações">
+                        <items>
+                            <MenuItem fx:id="itemProcessaEstoque" onAction="#AbrirProcessaEstoque" text="Processar Estoque"/>
+                        </items>
+                    </Menu>
+                </menus>
+            </MenuBar>
+
+            <!-- TÍTULO -->
+            <Label text="Sistema de Vendas e Estoque"
+                   style="-fx-font-size: 20px; -fx-font-weight: bold; -fx-padding: 10 0 10 10;"/>
+        </VBox>
+    </top>
+
+    <!-- CENTRO -->
+    <center>
+        <VBox alignment="CENTER" spacing="20">
+
+            <Label text="Bem-vindo ao sistema"
+                   style="-fx-font-size: 18px;"/>
+
+            <!-- BOTÕES RÁPIDOS -->
+            <HBox spacing="20" alignment="CENTER">
+
+                <Button text="Clientes"
+                        onAction="#AbrirCadastroClientes"
+                        prefWidth="120" prefHeight="40"/>
+
+                <Button text="Produtos"
+                        onAction="#AbrirCadastroProduto"
+                        prefWidth="120" prefHeight="40"/>
+
+                <Button text="Estoque"
+                        onAction="#AbrirProcessaEstoque"
+                        prefWidth="120" prefHeight="40"/>
+
+            </HBox>
+
+        </VBox>
+    </center>
+
+</BorderPane>

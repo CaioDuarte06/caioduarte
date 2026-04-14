@@ -12,14 +12,15 @@ public class ClienteDAO {
 	// SALVAR
 	public void inserir(ClienteModel c) {
 
-		String sql = "INSERT INTO clientes (nome, cpf, email, status) VALUES (?, ?, ?, ?)";
+		String sql = "INSERT INTO clientes (nome, cpf, cnpj, email, status) VALUES (?, ?, ?, ?, ?)";
 
 		try (Connection conn = conexao.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
 
 			stmt.setString(1, c.getNome());
 			stmt.setString(2, c.getCpf());
-			stmt.setString(3, c.getEmail());
-			stmt.setString(4, c.getStatus());
+			stmt.setString(3, c.getCnpj());
+			stmt.setString(4, c.getEmail());
+			stmt.setString(5, c.getStatus());
 
 			stmt.executeUpdate();
 
@@ -45,6 +46,7 @@ public class ClienteDAO {
 				c.setId(rs.getInt("id"));
 				c.setNome(rs.getString("nome"));
 				c.setCpf(rs.getString("cpf"));
+				c.setCnpj(rs.getString("cnpj"));
 				c.setEmail(rs.getString("email"));
 				c.setStatus(rs.getString("status"));
 
@@ -78,7 +80,7 @@ public class ClienteDAO {
 
 		List<ClienteModel> lista = new ArrayList<>();
 
-		String sql = "SELECT * FROM clientes WHERE nome LIKE ? OR cpf LIKE ? OR email LIKE ?";
+		String sql = "SELECT * FROM clientes WHERE nome LIKE ? OR cpf LIKE ? OR cnpj LIKE ? OR email LIKE ?";
 
 		try (Connection conn = conexao.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
 
@@ -87,6 +89,8 @@ public class ClienteDAO {
 			stmt.setString(1, busca);
 			stmt.setString(2, busca);
 			stmt.setString(3, busca);
+			stmt.setString(4, busca);
+
 
 			ResultSet rs = stmt.executeQuery();
 
@@ -96,6 +100,7 @@ public class ClienteDAO {
 				c.setId(rs.getInt("id"));
 				c.setNome(rs.getString("nome"));
 				c.setCpf(rs.getString("cpf"));
+				c.setCnpj(rs.getString("cnpj"));
 				c.setEmail(rs.getString("email"));
 				c.setStatus(rs.getString("status"));
 
@@ -129,5 +134,27 @@ public class ClienteDAO {
 		}
 
 		return false;
+	}
+	
+	public boolean existeCnpj(String cnpj) {
+
+	    String sql = "SELECT COUNT(*) FROM clientes WHERE cnpj = ?";
+
+	    try (Connection conn = conexao.getConnection();
+	         PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+	        stmt.setString(1, cnpj);
+
+	        ResultSet rs = stmt.executeQuery();
+
+	        if (rs.next()) {
+	            return rs.getInt(1) > 0;
+	        }
+
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+
+	    return false;
 	}
 }

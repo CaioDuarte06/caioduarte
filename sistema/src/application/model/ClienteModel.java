@@ -5,15 +5,17 @@ public class ClienteModel {
 	private int id;
 	private String nome;
 	private String cpf;
+	private String cnpj;
 	private String email;
 	private String status;
 
 	public ClienteModel() {
 	}
 
-	public ClienteModel(String nome, String cpf, String email, String status) {
+	public ClienteModel(String nome, String cpf, String cnpj, String email, String status) {
 		this.nome = nome;
 		this.cpf = cpf;
+		this.cnpj=cnpj;
 		this.email = email;
 		this.status = status;
 	}
@@ -38,9 +40,17 @@ public class ClienteModel {
 	public String getCpf() {
 		return cpf;
 	}
+	
+	public String getCnpj() {
+		return cnpj;
+	}
 
 	public void setCpf(String cpf) {
 		this.cpf = cpf;
+	}
+	
+	public void setCnpj(String cnpj) {
+		this.cnpj = cnpj;
 	}
 
 	public String getEmail() {

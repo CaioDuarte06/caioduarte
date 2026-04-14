@@ -39,6 +39,9 @@ public class ClientesController {
 
 	@FXML
 	private TableColumn<ClienteModel, String> colCpf;
+	
+	@FXML
+	private TableColumn<ClienteModel, String> colCnpj;
 
 	@FXML
 	private TableColumn<ClienteModel, String> colEmail;
@@ -51,6 +54,9 @@ public class ClientesController {
 
 	@FXML
 	private TextField txtCpf;
+	
+	@FXML
+	private TextField txtCnpj;
 
 	@FXML
 	private TextField txtEmail;
@@ -69,6 +75,7 @@ public class ClientesController {
 		colId.setCellValueFactory(new PropertyValueFactory<>("id"));
 		colNome.setCellValueFactory(new PropertyValueFactory<>("nome"));
 		colCpf.setCellValueFactory(new PropertyValueFactory<>("cpf"));
+		colCnpj.setCellValueFactory(new PropertyValueFactory<>("cnpj"));
 		colEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
 		colStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
 
@@ -100,6 +107,7 @@ public class ClientesController {
 	private void limparCampos() {
 		txtNome.clear();
 		txtCpf.clear();
+		txtCnpj.clear();
 		txtEmail.clear();
 		cbStatus.setValue(null);
 	}
@@ -121,8 +129,13 @@ public class ClientesController {
 			alert("CPF já cadastrado!");
 			return;
 		}
+		
+		if (clienteDAO.existeCnpj(txtCnpj.getText())) {
+			alert("CNPJ já cadastrado!");
+			return;
+		}
 
-		ClienteModel c = new ClienteModel(txtNome.getText(), txtCpf.getText(), txtEmail.getText(), cbStatus.getValue());
+		ClienteModel c = new ClienteModel(txtNome.getText(), txtCpf.getText(), txtCnpj.getText(), txtEmail.getText(), cbStatus.getValue());
 
 		clienteDAO.inserir(c);
 

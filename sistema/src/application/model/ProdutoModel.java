@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
+import application.Sessao;
 import application.conexao;
 import javafx.scene.control.Alert;
 
@@ -18,8 +19,9 @@ public class ProdutoModel {
     private double preco;
     private int quantidade;
     private String codigo_barras;
+    private int estoque_minimo;
 
-    public ProdutoModel(int id, String nome, String descricao, String categoria, double preco, int quantidade, String codigo_barras) {
+    public ProdutoModel(int id, String nome, String descricao, String categoria, double preco, int quantidade, String codigo_barras, int estoque_minimo) {
         this.id = id;
         this.nome = nome;
         this.descricao = descricao;
@@ -27,6 +29,7 @@ public class ProdutoModel {
         this.preco = preco;
         this.quantidade = quantidade;
         this.codigo_barras = codigo_barras;
+        this.estoque_minimo=estoque_minimo;
     }
 
     // Getters e setters
@@ -44,12 +47,17 @@ public class ProdutoModel {
     public void setQuantidade(int quantidade) { this.quantidade = quantidade; }
     public String getCodigoBarras() { return codigo_barras; }
     public void setCodigoBarras(String codigo_barras) { this.codigo_barras = codigo_barras; }
+    public int getEstoqueMinimo() { return estoque_minimo; }
+    public void setEstoqueMinimo(int estoque_minimo) { this.estoque_minimo = estoque_minimo; }
+
+    
+
 
     // Salvar produto (INSERT ou UPDATE)
     public void Salvar() {
         try (Connection conn = conexao.getConnection()) {
             if (id > 0) {
-                String sql = "UPDATE produto SET nome=?, descricao=?, categoria=?, preco=?, quantidade=?, codigo_barras=? WHERE id=?";
+                String sql = "UPDATE produto SET nome=?, descricao=?, categoria=?, preco=?, quantidade=?, codigo_barras=?, estoque_minimo=? WHERE id=?";
                 try (PreparedStatement stmt = conn.prepareStatement(sql)) {
                     stmt.setString(1, nome);
                     stmt.setString(2, descricao);
@@ -57,11 +65,12 @@ public class ProdutoModel {
                     stmt.setDouble(4, preco);
                     stmt.setInt(5, quantidade);
                     stmt.setString(6, codigo_barras);
-                    stmt.setInt(7, id);
+                    stmt.setInt(7, estoque_minimo);
+                    stmt.setInt(8, id);
                     stmt.executeUpdate();
                 }
             } else {
-                String sql = "INSERT INTO produto (nome, descricao, categoria, preco, quantidade, codigo_barras) VALUES (?,?,?,?,?,?)";
+                String sql = "INSERT INTO produto (nome, descricao, categoria, preco, quantidade, codigo_barras, estoque_minimo) VALUES (?,?,?,?,?,?,?)";
                 try (PreparedStatement stmt = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
                     stmt.setString(1, nome);
                     stmt.setString(2, descricao);
@@ -69,6 +78,8 @@ public class ProdutoModel {
                     stmt.setDouble(4, preco);
                     stmt.setInt(5, quantidade);
                     stmt.setString(6, codigo_barras);
+                    stmt.setInt(7, estoque_minimo);
+
                     stmt.executeUpdate();
 
                     // Recupera o id gerado
@@ -112,6 +123,7 @@ public class ProdutoModel {
                 preco = rs.getDouble("preco");
                 quantidade = rs.getInt("quantidade");
                 codigo_barras = rs.getString("codigo_barras");
+                estoque_minimo = rs.getInt("estoque_minimo");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -140,7 +152,9 @@ public class ProdutoModel {
                             rs.getString("categoria"),
                             rs.getDouble("preco"),
                             rs.getInt("quantidade"),
-                            rs.getString("codigo_barras")
+                            rs.getString("codigo_barras"),
+                            rs.getInt("estoque_minimo")
+
                     ));
                 }
             }
@@ -198,11 +212,13 @@ public class ProdutoModel {
             }
 
             // Salva histórico
-            String sqlHistorico = "INSERT INTO historico (produto_id, operacao, quantidade, data) VALUES (?, ?, ?, NOW())";
+            String sqlHistorico = "INSERT INTO historico (produto_id, operacao, quantidade, data, usuario) VALUES (?, ?, ?, NOW(), ?)";
             try (PreparedStatement stmtHist = conn.prepareStatement(sqlHistorico)) {
                 stmtHist.setInt(1, this.id);
                 stmtHist.setString(2, operacao);
                 stmtHist.setInt(3, quantidadeMovimentada);
+                stmtHist.setString(4, Sessao.cargoUsuario+": " + Sessao.nomeUsuario);
+
                 stmtHist.executeUpdate();
             }
 
@@ -214,5 +230,6 @@ public class ProdutoModel {
             mostrarAviso(e.getMessage());
         }
     }
+    
     
 }

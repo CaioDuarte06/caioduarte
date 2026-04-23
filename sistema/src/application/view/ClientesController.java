@@ -1,7 +1,9 @@
 package application.view;
 
 import application.Dao.ClienteDAO;
+import application.Dao.VendaDAO;
 import application.model.ClienteModel;
+import application.model.VendaModel;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -48,6 +50,15 @@ public class ClientesController {
 
 	@FXML
 	private TableColumn<ClienteModel, String> colStatus;
+	
+	@FXML
+	private TableView<VendaModel> tabHistorico;
+
+	@FXML
+	private TableColumn<VendaModel, String> colData;
+
+	@FXML
+	private TableColumn<VendaModel, Double> colTotal;
 
 	@FXML
 	private TextField txtBuscar;
@@ -65,32 +76,51 @@ public class ClientesController {
 	private TextField txtNome;
 
 	private ClienteDAO clienteDAO = new ClienteDAO();
+	private VendaDAO vendaDAO = new VendaDAO();
 
 	private ObservableList<ClienteModel> listaClientes = FXCollections.observableArrayList();
 
 	@FXML
 	public void initialize() {
-		cbStatus.getItems().addAll("Ativo", "Inativo");
+	    cbStatus.getItems().addAll("Ativo", "Inativo");
 
-		colId.setCellValueFactory(new PropertyValueFactory<>("id"));
-		colNome.setCellValueFactory(new PropertyValueFactory<>("nome"));
-		colCpf.setCellValueFactory(new PropertyValueFactory<>("cpf"));
-		colCnpj.setCellValueFactory(new PropertyValueFactory<>("cnpj"));
-		colEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
-		colStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
+	    colId.setCellValueFactory(new PropertyValueFactory<>("id"));
+	    colNome.setCellValueFactory(new PropertyValueFactory<>("nome"));
+	    colCpf.setCellValueFactory(new PropertyValueFactory<>("cpf"));
+	    colCnpj.setCellValueFactory(new PropertyValueFactory<>("cnpj"));
+	    colEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
+	    colStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
 
-		txtNome.setOnAction(e -> txtCpf.requestFocus());
-		txtCpf.setOnAction(e -> txtEmail.requestFocus());
-		txtEmail.setOnAction(e -> salvarCliente(e));
-		txtBuscar.setOnAction(e -> buscarCliente(e));
+	    colData.setCellValueFactory(new PropertyValueFactory<>("data"));
+	    colTotal.setCellValueFactory(new PropertyValueFactory<>("total"));
 
-		carregarClientes();
+	    txtNome.setOnAction(e -> txtCpf.requestFocus());
+	    txtCpf.setOnAction(e -> txtCnpj.requestFocus());
+	    txtCnpj.setOnAction(e -> txtEmail.requestFocus());
+	    txtEmail.setOnAction(e -> salvarCliente(e));
+	    txtBuscar.setOnAction(e -> buscarCliente(e));
+
+	    tabClientes.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, cliente) -> {
+
+	        if(cliente != null){
+	            tabHistorico.setItems(
+	                FXCollections.observableArrayList(
+	                    vendaDAO.ultimasCompras(cliente.getId())
+	                )
+	            );
+	        } else {
+	            tabHistorico.getItems().clear();
+	        }
+	    });
+
+	    carregarClientes(); 
 	}
 
 	@FXML
 	void buscarCliente(ActionEvent event) {
 
 		tabClientes.setItems(FXCollections.observableArrayList(clienteDAO.buscar(txtBuscar.getText())));
+		
 	}
 
 	@FXML
@@ -112,9 +142,23 @@ public class ClientesController {
 		cbStatus.setValue(null);
 	}
 
-	private void carregarClientes() {
+	/*private void carregarClientes() {
 
 		tabClientes.setItems(FXCollections.observableArrayList(clienteDAO.listar()));
+	}*/
+	
+	private void carregarClientes() {
+
+	    ObservableList<ClienteModel> lista =
+	        FXCollections.observableArrayList(clienteDAO.listar());
+
+	    tabClientes.setItems(lista);
+
+	    if (!lista.isEmpty()) {
+	        tabClientes.getSelectionModel().selectFirst();
+	    } else {
+	        tabHistorico.getItems().clear();
+	    }
 	}
 
 	@FXML

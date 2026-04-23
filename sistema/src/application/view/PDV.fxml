@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="550.0" prefWidth="800.0"
+	xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+	fx:controller="application.view.PDVController">
+
+	<children>
+		<ComboBox fx:id="cbClientes" layoutX="500" layoutY="20"
+			prefWidth="200" />
+		<!-- BUSCA -->
+		<TextField fx:id="txtBuscaProduto" layoutX="20" layoutY="20"
+			prefWidth="300" promptText="Buscar produto..." />
+		<Button text="Adicionar" layoutX="330" layoutY="20"
+			onAction="#adicionarProduto" />
+
+		<!-- 🔥 TABELA DE PRODUTOS (FALTAVA ISSO) -->
+		<TableView fx:id="tabProdutos" layoutX="20" layoutY="60"
+			prefWidth="350" prefHeight="200">
+			<columns>
+				<TableColumn fx:id="colProdNome" text="Nome"
+					prefWidth="150" />
+				<TableColumn fx:id="colProdPreco" text="Preço"
+					prefWidth="100" />
+				<TableColumn fx:id="colProdQtd" text="Estoque"
+					prefWidth="100" />
+			</columns>
+		</TableView>
+
+		<!-- CARRINHO -->
+		<TableView fx:id="tabelaCarrinho" layoutX="400" layoutY="60"
+			prefWidth="380" prefHeight="250">
+			<columns>
+				<TableColumn fx:id="colNome" text="Produto"
+					prefWidth="120" />
+				<TableColumn fx:id="colQtd" text="Qtd" prefWidth="60" />
+				<TableColumn fx:id="colPreco" text="Preço"
+					prefWidth="80" />
+				<TableColumn fx:id="colSubtotal" text="Subtotal"
+					prefWidth="100" />
+			</columns>
+		</TableView>
+
+		<!-- PAGAMENTO -->
+		<Label text="Desconto (%)" layoutX="20" layoutY="280" />
+		<TextField fx:id="txtDesconto" layoutX="120" layoutY="275"
+			prefWidth="80" />
+
+		<Label text="Total:" layoutX="20" layoutY="320" />
+		<Label fx:id="lblTotal" layoutX="80" layoutY="320"
+			text="R$ 0.00" />
+
+		<Label text="Valor Pago:" layoutX="20" layoutY="360" />
+		<TextField fx:id="txtPago" layoutX="120" layoutY="355"
+			prefWidth="100" />
+
+		<Label text="Troco:" layoutX="250" layoutY="360" />
+		<Label fx:id="lblTroco" layoutX="300" layoutY="360"
+			text="R$ 0.00" />
+
+		<Button text="Finalizar Venda" layoutX="600" layoutY="400"
+			prefWidth="150" onAction="#finalizarVenda" />
+
+	</children>
+</AnchorPane>

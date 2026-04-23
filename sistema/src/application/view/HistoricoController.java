@@ -24,6 +24,7 @@ public class HistoricoController {
     @FXML private TableColumn<MovimentacaoEstoqueModel, String> colNome;
     @FXML private TableColumn<MovimentacaoEstoqueModel, Integer> colQtd;
     @FXML private TableColumn<MovimentacaoEstoqueModel, String> colTipo;
+    @FXML private TableColumn<MovimentacaoEstoqueModel, String> colUsuario;
 
     @FXML private DatePicker dtFinal;
     @FXML private DatePicker dtInicio;
@@ -41,6 +42,7 @@ public class HistoricoController {
         colNome.setCellValueFactory(new PropertyValueFactory<>("nomeProd"));
         colTipo.setCellValueFactory(new PropertyValueFactory<>("tipo"));
         colQtd.setCellValueFactory(new PropertyValueFactory<>("quantidade"));
+        colUsuario.setCellValueFactory(new PropertyValueFactory<>("usuario"));
 
         // Datas padrão do mês atual
         hoje = LocalDate.now();

@@ -8,75 +8,61 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity"
-	minHeight="-Infinity" minWidth="-Infinity" prefHeight="434.0"
-	prefWidth="728.0" xmlns="http://javafx.com/javafx/25"
-	xmlns:fx="http://javafx.com/fxml/1"
-	fx:controller="application.view.CadastroProdutoController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="466.0" prefWidth="733.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.view.CadastroProdutoController">
 	<children>
-		<Label layoutX="208.0" layoutY="7.0" prefHeight="35.0"
-			prefWidth="186.0" text="Cadastro de Produtos">
+		<Label layoutX="270.0" layoutY="14.0" prefHeight="35.0" prefWidth="186.0" text="Cadastro de Produtos">
 			<font>
 				<Font name="System Bold" size="18.0" />
 			</font>
 		</Label>
-		<TextField fx:id="txtDescricao" layoutX="227.0"
-			layoutY="121.0" promptText="Descrição:" />
-		<TextField fx:id="txtCategoria" layoutX="414.0"
-			layoutY="121.0" promptText="Categoria:" />
-		<TextField fx:id="txtPreco" layoutX="26.0" layoutY="187.0"
-			promptText="Preço:" />
-		<TextField fx:id="txtQuantidade" layoutX="227.0"
-			layoutY="187.0" promptText="Quantidade:" />
-		<TextField fx:id="txtNome" layoutX="26.0" layoutY="121.0"
-			promptText="Nome:" />
+		<TextField fx:id="txtDescricao" layoutX="227.0" layoutY="121.0" promptText="Descrição:" />
+		<TextField fx:id="txtCategoria" layoutX="414.0" layoutY="121.0" promptText="Categoria:" />
+		<TextField fx:id="txtPrecoCusto" layoutX="26.0" layoutY="187.0" promptText="Preço de Custo:" />
+
+		<TextField fx:id="txtMargem" layoutX="26.0" layoutY="236.0" promptText="Margem %" />
+
+		<TextField fx:id="txtPrecoVenda" editable="false" layoutX="226.0" layoutY="236.0" promptText="Preço de Venda" />
+		<TextField fx:id="txtQuantidade" layoutX="226.0" layoutY="187.0" promptText="Quantidade:" />
+		<TextField fx:id="txtNome" layoutX="26.0" layoutY="121.0" promptText="Nome:" />
+		<TextField fx:id="txtEstoqueMinimo" layoutX="415.0" layoutY="236.0" promptText="Estoque mínimo" />
 		<Label layoutX="26.0" layoutY="95.0" text="Nome:" />
-		<Label layoutX="26.0" layoutY="160.0" text="Preço:" />
+		<Label layoutX="26.0" layoutY="160.0" text="Custo:" />
+		<Label layoutX="26.0" layoutY="214.0" text="Margem %:" />
+		<Label layoutX="229.0" layoutY="214.0" text="Venda:" />
 		<Label layoutX="229.0" layoutY="95.0" text="Descrição:" />
 		<Label layoutX="229.0" layoutY="160.0" text="Quantidade:" />
 		<Label layoutX="414.0" layoutY="95.0" text="Categoria:" />
-		<Button fx:id="btnSalvar" layoutX="580.0" layoutY="187.0"
-			mnemonicParsing="false" onAction="#Salvar" text="Salvar">
+		<Button fx:id="btnSalvar" layoutX="580.0" layoutY="187.0" mnemonicParsing="false" onAction="#Salvar" text="Salvar">
 			<font>
 				<Font name="System Bold" size="12.0" />
 			</font>
 		</Button>
-		<TextField fx:id="txtBuscar" layoutX="27.0" layoutY="56.0"
-			prefHeight="26.0" prefWidth="394.0"
-			promptText="Digite um texto para pesquisar um produto :" />
-		<Button fx:id="btnBuscar" layoutX="463.0" layoutY="57.0"
-			mnemonicParsing="false" onAction="#Pesquisar" text="Buscar">
+		<TextField fx:id="txtBuscar" layoutX="27.0" layoutY="56.0" prefHeight="26.0" prefWidth="394.0" promptText="Digite um texto para pesquisar um produto :" />
+		<Button fx:id="btnBuscar" layoutX="463.0" layoutY="57.0" mnemonicParsing="false" onAction="#Pesquisar" text="Buscar">
 			<font>
 				<Font name="System Bold" size="12.0" />
 			</font>
 		</Button>
-		<Button fx:id="btnExcluir" layoutX="651.0" layoutY="187.0"
-			mnemonicParsing="false" onAction="#Excluir" text="Excluir">
+		<Button fx:id="btnExcluir" layoutX="651.0" layoutY="187.0" mnemonicParsing="false" onAction="#Excluir" text="Excluir">
 			<font>
 				<Font name="System Bold" size="12.0" />
 			</font>
 		</Button>
-		<TableView fx:id="tabProdutos" layoutY="244.0"
-			prefHeight="199.0" prefWidth="600.0" AnchorPane.bottomAnchor="-0.0"
-			AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+		<TableView fx:id="tabProdutos" layoutY="244.0" prefHeight="199.0" prefWidth="728.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
 			<columns>
 				<TableColumn fx:id="colId" prefWidth="48.0" text="ID" />
-				<TableColumn fx:id="colNome"
-					prefWidth="166.4000244140625" text="Nome" />
-				<TableColumn fx:id="colDescricao"
-					prefWidth="157.5999755859375" text="Descrição" />
-				<TableColumn fx:id="colCategoria"
-					prefWidth="87.20001220703125" text="Categoria" />
-				<TableColumn fx:id="colPreco"
-					prefWidth="73.60003662109375" text="Preço" />
-				<TableColumn fx:id="colQtd"
-					prefWidth="69.60003662109375" text="Qtd" />
-				<TableColumn fx:id="colCodigoBarras" prefWidth="120"
-					text="Código de Barras" />
+				<TableColumn fx:id="colNome" prefWidth="166.4000244140625" text="Nome" />
+				<TableColumn fx:id="colDescricao" prefWidth="157.5999755859375" text="Descrição" />
+				<TableColumn fx:id="colCategoria" prefWidth="87.20001220703125" text="Categoria" />
+				<TableColumn fx:id="colPreco" prefWidth="73.60003662109375" text="Preço" />
+				<TableColumn fx:id="colQtd" minWidth="0.0" prefWidth="0.0" text="Qtd" />
+				<TableColumn fx:id="colCodigoBarras" prefWidth="124.7999267578125" text="Código de Barras" />
+				<TableColumn fx:id="colEstoque" prefWidth="72.7999267578125" text="Estoque" />
+
 			</columns>
 		</TableView>
-		<TextField fx:id="txtCodigoBarras" layoutX="414.0"
-			layoutY="187.0" promptText="Codigo de barras:" />
+		<TextField fx:id="txtCodigoBarras" layoutX="414.0" layoutY="187.0" promptText="Codigo de barras:" />
 		<Label layoutX="414.0" layoutY="160.0" text="Código de barras" />
+		<Label layoutX="414.0" layoutY="214.0" text="Estoque:" />
 	</children>
 </AnchorPane>

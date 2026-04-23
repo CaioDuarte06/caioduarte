@@ -47,7 +47,7 @@ public class ProdutoEstoque {
 
     private ObservableList<ProdutoModel> listaProdutos;
 
-    private ProdutoModel produto = new ProdutoModel(0, null, null, null, 0, 0, null);
+    private ProdutoModel produto = new ProdutoModel(0, null, null, null, 0, 0, null,0);
 
     // INICIALIZAÇÃO
     @FXML

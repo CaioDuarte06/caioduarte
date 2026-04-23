@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,15 +18,18 @@ public class MovimentacaoEstoqueModel {
 	private String data; // String para exibir na tabela
 	private int quantidade;
 	private String tipo;
+	private String usuario;
 
 	// Construtor
-	public MovimentacaoEstoqueModel(int id, int idProd, String nomeProd, String data, int quantidade, String tipo) {
+	public MovimentacaoEstoqueModel(int id, int idProd, String nomeProd, String data, int quantidade, String tipo,
+			String usuario) {
 		this.id = id;
 		this.idProd = idProd;
 		this.nomeProd = nomeProd;
 		this.data = data;
 		this.quantidade = quantidade;
 		this.tipo = tipo;
+		this.usuario = usuario;
 	}
 
 	// Getters
@@ -53,11 +57,15 @@ public class MovimentacaoEstoqueModel {
 		return tipo;
 	}
 
-	//  Método estático para buscar histórico
+	public String getUsuario() {
+		return usuario;
+	}
+
+	// Método estático para buscar histórico
 	public static List<MovimentacaoEstoqueModel> historicoMovimentacao(int produtoId, LocalDate inicio, LocalDate fim) {
 		List<MovimentacaoEstoqueModel> lista = new ArrayList<>();
 
-		String sql = "SELECT h.id, h.produto_id, p.nome AS nomeProd, h.data, h.quantidade, h.operacao "
+		String sql = "SELECT h.id, h.produto_id, p.nome AS nomeProd, h.data, h.quantidade, h.operacao, h.usuario "
 				+ "FROM historico h " + "JOIN produto p ON h.produto_id = p.id ";
 
 		if (produtoId > 0) {
@@ -72,17 +80,18 @@ public class MovimentacaoEstoqueModel {
 
 			int paramIndex = 1;
 			if (produtoId > 0) {
-			    stmt.setInt(paramIndex++, produtoId);
+				stmt.setInt(paramIndex++, produtoId);
 			}
 			stmt.setDate(paramIndex++, java.sql.Date.valueOf(inicio));
 			stmt.setDate(paramIndex, java.sql.Date.valueOf(fim));
 
 			ResultSet rs = stmt.executeQuery();
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
 			while (rs.next()) {
 				lista.add(new MovimentacaoEstoqueModel(rs.getInt("id"), rs.getInt("produto_id"),
-						rs.getString("nomeProd"), rs.getTimestamp("data").toLocalDateTime().toString(),
-						rs.getInt("quantidade"), rs.getString("operacao")));
+						rs.getString("nomeProd"), rs.getTimestamp("data").toLocalDateTime().format(formatter),
+						rs.getInt("quantidade"), rs.getString("operacao"), rs.getString("usuario")));
 			}
 
 		} catch (Exception e) {

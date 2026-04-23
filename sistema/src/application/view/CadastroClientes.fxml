@@ -9,63 +9,65 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="500.0" prefWidth="750.0"
-	xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1"
-	fx:controller="application.view.ClientesController">
+<AnchorPane prefHeight="650.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.view.ClientesController">
 
 	<children>
 
 		<!-- TÍTULO -->
-		<Label layoutX="260.0" layoutY="14.0"
-			text="Cadastro de Clientes">
+		<Label layoutX="260.0" layoutY="14.0" text="Cadastro de Clientes">
 			<font>
 				<Font name="System Bold" size="18.0" />
 			</font>
 		</Label>
 
 		<!-- CAMPOS -->
-		<TextField fx:id="txtNome" layoutX="30.0" layoutY="70.0"
-			promptText="Nome" />
-		<TextField fx:id="txtCpf" layoutX="200.0" layoutY="70.0"
-			promptText="CPF" />
-		<TextField fx:id="txtEmail" layoutX="30.0" layoutY="107.0"
-			promptText="Email" />
+		<TextField fx:id="txtNome" layoutX="30.0" layoutY="70.0" promptText="Nome" />
+		<TextField fx:id="txtCpf" layoutX="200.0" layoutY="70.0" promptText="CPF" />
+		<TextField fx:id="txtEmail" layoutX="30.0" layoutY="107.0" promptText="Email" />
 
-		<ComboBox fx:id="cbStatus" layoutX="550.0" layoutY="70.0"
-			prefWidth="150.0" />
+		<ComboBox fx:id="cbStatus" layoutX="550.0" layoutY="70.0" prefWidth="150.0" />
 
 		<!-- BOTÕES -->
-		<Button fx:id="btnSalvar" layoutX="200.0" layoutY="107.0"
-			onAction="#salvarCliente" text="Salvar" />
+		<Button fx:id="btnSalvar" layoutX="200.0" layoutY="107.0" onAction="#salvarCliente" text="Salvar" />
 
-		<Button fx:id="btnExcluir" layoutX="268.0" layoutY="107.0"
-			onAction="#excluirCliente" text="Excluir" />
+		<Button fx:id="btnExcluir" layoutX="268.0" layoutY="107.0" onAction="#excluirCliente" text="Excluir" />
 
 		<!-- BUSCA -->
-		<TextField fx:id="txtBuscar" layoutX="30.0" layoutY="170.0"
-			prefWidth="500.0" promptText="Buscar por nome, CPF ou email" />
+		<TextField fx:id="txtBuscar" layoutX="25.0" layoutY="151.0" prefWidth="500.0" promptText="Buscar por nome, CPF ou email" />
 
-		<Button fx:id="btnBuscar" layoutX="550.0" layoutY="170.0"
-			onAction="#buscarCliente" text="Buscar" />
+		<Button fx:id="btnBuscar" layoutX="550.0" layoutY="151.0" onAction="#buscarCliente" text="Buscar" />
 
 		<!-- TABELA -->
-		<TableView fx:id="tabClientes" layoutX="30.0"
-			layoutY="220.0" prefHeight="250.0" prefWidth="680.0">
+		<TableView fx:id="tabClientes" layoutX="30.0" layoutY="185.0" prefHeight="230.0" prefWidth="680.0">
 
 			<columns>
 				<TableColumn fx:id="colId" prefWidth="50" text="ID" />
 				<TableColumn fx:id="colNome" prefWidth="150" text="Nome" />
 				<TableColumn fx:id="colCpf" prefWidth="120" text="CPF" />
 				<TableColumn fx:id="colCnpj" prefWidth="120" text="CNPJ" />
-				<TableColumn fx:id="colEmail"
-					prefWidth="147.199951171875" text="Email" />
-				<TableColumn fx:id="colStatus"
-					prefWidth="91.2000732421875" text="Status" />
+				<TableColumn fx:id="colEmail" prefWidth="147.199951171875" text="Email" />
+				<TableColumn fx:id="colStatus" prefWidth="91.2000732421875" text="Status" />
 			</columns>
 
 		</TableView>
-		<TextField fx:id="txtCnpj" layoutX="375.0" layoutY="70.0"
-			promptText="CNPJ" />
+		
+		<!-- HISTÓRICO -->
+<Label layoutX="290.0" layoutY="424.0" prefHeight="20.0" prefWidth="117.0" text="Últimas Compras">
+    <font>
+        <Font name="System Bold" size="14.0" />
+    </font>
+</Label>
+
+<TableView fx:id="tabHistorico" layoutX="30.0" layoutY="450.0" prefHeight="150.0" prefWidth="680.0">
+
+    <columns>
+        <TableColumn fx:id="colData" prefWidth="200" text="Data" />
+        <TableColumn fx:id="colTotal" prefWidth="150" text="Total" />
+    </columns>
+
+</TableView>
+		
+		<TextField fx:id="txtCnpj" layoutX="375.0" layoutY="70.0" promptText="CNPJ" />
 
 	</children>
 </AnchorPane>

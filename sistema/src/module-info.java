@@ -8,5 +8,4 @@ module sistema {
 	opens application to javafx.graphics, javafx.fxml;
 	opens application.view to javafx.graphics, javafx.fxml;
 	opens application.model to javafx.base;
-	
 }

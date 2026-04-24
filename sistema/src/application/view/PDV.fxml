@@ -1,67 +1,84 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="550.0" prefWidth="800.0"
-	xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
-	fx:controller="application.view.PDVController">
+<AnchorPane prefHeight="550.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.view.PDVController">
 
-	<children>
-		<ComboBox fx:id="cbClientes" layoutX="500" layoutY="20"
-			prefWidth="200" />
-		<!-- BUSCA -->
-		<TextField fx:id="txtBuscaProduto" layoutX="20" layoutY="20"
-			prefWidth="300" promptText="Buscar produto..." />
-		<Button text="Adicionar" layoutX="330" layoutY="20"
-			onAction="#adicionarProduto" />
+    <children>
 
-		<!-- 🔥 TABELA DE PRODUTOS (FALTAVA ISSO) -->
-		<TableView fx:id="tabProdutos" layoutX="20" layoutY="60"
-			prefWidth="350" prefHeight="200">
-			<columns>
-				<TableColumn fx:id="colProdNome" text="Nome"
-					prefWidth="150" />
-				<TableColumn fx:id="colProdPreco" text="Preço"
-					prefWidth="100" />
-				<TableColumn fx:id="colProdQtd" text="Estoque"
-					prefWidth="100" />
-			</columns>
-		</TableView>
+        <!-- CLIENTE -->
+        <ComboBox fx:id="cbClientes" layoutX="517.0" layoutY="46.0" prefWidth="200" />
+        <Text layoutX="564.0" layoutY="41.0" text="Selecionar Cliente">
+            <font>
+                <Font name="System Bold" size="13.0" />
+            </font>
+        </Text>
 
-		<!-- CARRINHO -->
-		<TableView fx:id="tabelaCarrinho" layoutX="400" layoutY="60"
-			prefWidth="380" prefHeight="250">
-			<columns>
-				<TableColumn fx:id="colNome" text="Produto"
-					prefWidth="120" />
-				<TableColumn fx:id="colQtd" text="Qtd" prefWidth="60" />
-				<TableColumn fx:id="colPreco" text="Preço"
-					prefWidth="80" />
-				<TableColumn fx:id="colSubtotal" text="Subtotal"
-					prefWidth="100" />
-			</columns>
-		</TableView>
+        <!-- BUSCA -->
+        <TextField fx:id="txtBuscaProduto" layoutX="19.0" layoutY="46.0" prefWidth="300" promptText="Buscar produto..." />
 
-		<!-- PAGAMENTO -->
-		<Label text="Desconto (%)" layoutX="20" layoutY="280" />
-		<TextField fx:id="txtDesconto" layoutX="120" layoutY="275"
-			prefWidth="80" />
+        <Button layoutX="332.0" layoutY="46.0" onAction="#adicionarProduto" style="-fx-background-color: #2ecc71; -fx-text-fill: white; -fx-background-radius: 8;" text="Adicionar" />
 
-		<Label text="Total:" layoutX="20" layoutY="320" />
-		<Label fx:id="lblTotal" layoutX="80" layoutY="320"
-			text="R$ 0.00" />
+        <Button layoutX="410.0" layoutY="46.0" onAction="#removerProduto" style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-background-radius: 8;" text="Remover" />
 
-		<Label text="Valor Pago:" layoutX="20" layoutY="360" />
-		<TextField fx:id="txtPago" layoutX="120" layoutY="355"
-			prefWidth="100" />
+        <!-- TITULOS -->
+        <Text layoutX="153.0" layoutY="108.0" text="Produtos">
+            <font>
+                <Font name="System Bold" size="18.0" />
+            </font>
+        </Text>
 
-		<Label text="Troco:" layoutX="250" layoutY="360" />
-		<Label fx:id="lblTroco" layoutX="300" layoutY="360"
-			text="R$ 0.00" />
+        <Text layoutX="580.0" layoutY="109.0" text="Carrinho">
+            <font>
+                <Font name="System Bold" size="18.0" />
+            </font>
+        </Text>
 
-		<Button text="Finalizar Venda" layoutX="600" layoutY="400"
-			prefWidth="150" onAction="#finalizarVenda" />
+        <!-- PRODUTOS -->
+        <TableView fx:id="tabProdutos" layoutX="15.0" layoutY="125.0" prefHeight="250.0" prefWidth="350">
+            <columns>
+                <TableColumn fx:id="colProdNome" prefWidth="150" text="Nome" />
+                <TableColumn fx:id="colProdPreco" prefWidth="100" text="Preço" />
+                <TableColumn fx:id="colProdQtd" prefWidth="100" text="Estoque" />
+            </columns>
+        </TableView>
 
-	</children>
+        <!-- CARRINHO -->
+        <TableView fx:id="tabelaCarrinho" layoutX="410.0" layoutY="124.0" prefHeight="250" prefWidth="380">
+            <columns>
+                <TableColumn fx:id="colNome" prefWidth="120" text="Produto" />
+                <TableColumn fx:id="colQtd" prefWidth="60" text="Qtd" />
+                <TableColumn fx:id="colPreco" prefWidth="80" text="Preço" />
+                <TableColumn fx:id="colSubtotal" prefWidth="100" text="Subtotal" />
+            </columns>
+        </TableView>
+
+        <!-- PAGAMENTO -->
+        <Label layoutX="13.0" layoutY="430.0" text="Desconto (%)" />
+        <TextField fx:id="txtDesconto" layoutX="110.0" layoutY="426.0" prefWidth="80" />
+
+        <Label layoutX="19.0" layoutY="460.0" text="Pagamento:" />
+        <ComboBox fx:id="cbPagamento" layoutX="110.0" layoutY="456.0" prefHeight="26.0" prefWidth="130.0" />
+
+        <Label layoutX="245.0" layoutY="454.0" text="Total:" />
+        <Label fx:id="lblTotal" layoutX="290.0" layoutY="454.0" text="R$ 0.00" textFill="#42a962" />
+
+        <Label layoutX="19.0" layoutY="490.0" text="Valor Pago:" />
+        <TextField fx:id="txtPago" layoutX="110.0" layoutY="486.0" prefWidth="100" />
+
+        <Label layoutX="245.0" layoutY="490.0" text="Troco:" />
+        <Label fx:id="lblTroco" layoutX="290.0" layoutY="490.0" text="R$ 0.00" textFill="#49b462" />
+
+        <!-- FINALIZAR -->
+        <Button layoutX="600.0" layoutY="400.0" onAction="#finalizarVenda" prefWidth="150" text="Finalizar Venda" />
+
+    </children>
 </AnchorPane>

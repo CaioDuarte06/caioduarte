@@ -36,6 +36,7 @@ public class PDVController {
     @FXML private TableColumn<ItemVenda, Double> colPreco;
     @FXML private TableColumn<ItemVenda, Double> colSubtotal;
     @FXML private ComboBox<ClienteModel> cbClientes;
+    @FXML private ComboBox<String> cbPagamento;
 
     private ClienteDAO clienteDAO = new ClienteDAO();
     private VendaDAO vendaDAO = new VendaDAO();
@@ -50,6 +51,9 @@ public class PDVController {
         colProdNome.setCellValueFactory(new PropertyValueFactory<>("nome"));
         colProdPreco.setCellValueFactory(new PropertyValueFactory<>("preco"));
         colProdQtd.setCellValueFactory(new PropertyValueFactory<>("quantidade"));
+        
+        cbPagamento.getItems().addAll("Dinheiro", "Cartão", "Pix");
+        cbPagamento.setValue("Dinheiro");
 
         // CARRINHO
         colNome.setCellValueFactory(new PropertyValueFactory<>("nome"));
@@ -102,12 +106,29 @@ public class PDVController {
         }
 
         ItemVenda novo = new ItemVenda(
-                selecionado.getNome(),
-                1,
-                selecionado.getPreco()
-        );
+        	    selecionado.getId(),   
+        	    selecionado.getNome(),
+        	    1,
+        	    selecionado.getPreco()
+        	);
 
         carrinho.add(novo);
+        atualizarCarrinho();
+    }
+    
+    @FXML
+    public void removerProduto() {
+
+        ItemVenda selecionado = tabelaCarrinho.getSelectionModel().getSelectedItem();
+
+        if (selecionado == null) {
+            mostrarAlerta("Selecione um item do carrinho!");
+            return;
+        }
+
+        // remove direto
+        carrinho.remove(selecionado);
+
         atualizarCarrinho();
     }
 
@@ -150,24 +171,39 @@ public class PDVController {
             total += item.getSubtotal();
         }
 
-        double pago;
-        try {
-            pago = Double.parseDouble(txtPago.getText());
-        } catch (Exception e) {
-            mostrarAlerta("Valor pago inválido!");
+        String tipoPagamento = cbPagamento.getValue();
+
+        if (tipoPagamento == null) {
+            mostrarAlerta("Selecione a forma de pagamento!");
             return;
         }
 
-        if (pago < total) {
-            mostrarAlerta("Valor insuficiente!");
-            return;
+        double pago = total;
+
+        if (tipoPagamento.equals("Dinheiro")) {
+
+            try {
+                pago = Double.parseDouble(txtPago.getText());
+            } catch (Exception e) {
+                mostrarAlerta("Valor pago inválido!");
+                return;
+            }
+
+            if (pago < total) {
+                mostrarAlerta("Valor insuficiente!");
+                return;
+            }
+
+            double troco = pago - total;
+            lblTroco.setText(String.format("R$ %.2f", troco));
+
+        } else {
+            // CARTÃO OU PIX
+            lblTroco.setText("R$ 0.00");
         }
 
-        double troco = pago - total;
-        lblTroco.setText(String.format("R$ %.2f", troco));
-
         try {
-            // 🔥 SALVA VENDA NO BANCO
+            // SALVA VENDA NO BANCO
             VendaModel venda = new VendaModel(
                     cliente.getId(),
                     null,
@@ -175,6 +211,21 @@ public class PDVController {
             );
 
             vendaDAO.inserir(venda);
+
+            // BAIXA AUTOMÁTICA DE ESTOQUE
+            for (ItemVenda item : carrinho) {
+
+                ProdutoModel produto = new ProdutoModel(
+                    item.getProdutoId(),
+                    null, null, null,
+                    0,
+                    item.getQuantidade(),
+                    null,
+                    0
+                );
+
+                produto.processarEstoque("Saída");
+            }
 
             mostrarCupom();
 

@@ -2,28 +2,41 @@ package application.model;
 
 public class ItemVenda {
 
-    private String nome;
-    private int quantidade;
-    private double preco;
-    private double subtotal;
+	private String nome;
+	private int quantidade;
+	private double preco;
+	private double subtotal;
+	private int produtoId;
 
-    public ItemVenda(String nome, int quantidade, double preco) {
-        this.nome = nome;
-        this.quantidade = quantidade;
-        this.preco = preco;
-        this.subtotal = quantidade * preco;
-    }
+	public ItemVenda(int produtoId, String nome, int quantidade, double preco) {
+		this.produtoId = produtoId;
+		this.nome = nome;
+		this.quantidade = quantidade;
+		this.preco = preco;
+	}
 
-    public String getNome() { return nome; }
+	public String getNome() {
+		return nome;
+	}
 
-    public int getQuantidade() { return quantidade; }
+	public int getProdutoId() {
+		return produtoId;
+	}
 
-    public void setQuantidade(int quantidade) {
-        this.quantidade = quantidade;
-        this.subtotal = quantidade * preco;
-    }
+	public int getQuantidade() {
+		return quantidade;
+	}
 
-    public double getPreco() { return preco; }
+	public void setQuantidade(int quantidade) {
+		this.quantidade = quantidade;
+		this.subtotal = quantidade * preco;
+	}
 
-    public double getSubtotal() { return subtotal; }
+	public double getPreco() {
+		return preco;
+	}
+
+	public double getSubtotal() {
+	    return quantidade * preco;
+	}
 }

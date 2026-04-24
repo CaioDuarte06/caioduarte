@@ -6,193 +6,259 @@ import application.model.ClienteModel;
 import application.model.VendaModel;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 public class ClientesController {
 
-	@FXML
-	private Button btnBuscar;
+    @FXML private Button btnBuscar;
+    @FXML private Button btnExcluir;
+    @FXML private Button btnSalvar;
 
-	@FXML
-	private Button btnExcluir;
+    @FXML private ComboBox<String> cbStatus;
 
-	@FXML
-	private Button btnSalvar;
+    @FXML private TableView<ClienteModel> tabClientes;
+    @FXML private TableColumn<ClienteModel, Integer> colId;
+    @FXML private TableColumn<ClienteModel, String> colNome;
+    @FXML private TableColumn<ClienteModel, String> colCpf;
+    @FXML private TableColumn<ClienteModel, String> colCnpj;
+    @FXML private TableColumn<ClienteModel, String> colEmail;
+    @FXML private TableColumn<ClienteModel, String> colStatus;
 
-	@FXML
-	private ComboBox<String> cbStatus;
+    @FXML private TableView<VendaModel> tabHistorico;
+    @FXML private TableColumn<VendaModel, String> colData;
+    @FXML private TableColumn<VendaModel, Double> colTotal;
 
-	@FXML
-	private TableView<ClienteModel> tabClientes;
+    @FXML private TextField txtBuscar;
+    @FXML private TextField txtCpf;
+    @FXML private TextField txtCnpj;
+    @FXML private TextField txtEmail;
+    @FXML private TextField txtNome;
 
-	@FXML
-	private TableColumn<ClienteModel, Integer> colId;
+    private ClienteDAO clienteDAO = new ClienteDAO();
+    private VendaDAO vendaDAO = new VendaDAO();
 
-	@FXML
-	private TableColumn<ClienteModel, String> colNome;
+    @FXML
+    public void initialize() {
 
-	@FXML
-	private TableColumn<ClienteModel, String> colCpf;
-	
-	@FXML
-	private TableColumn<ClienteModel, String> colCnpj;
+        cbStatus.getItems().addAll("Ativo", "Inativo");
 
-	@FXML
-	private TableColumn<ClienteModel, String> colEmail;
+        colId.setCellValueFactory(new PropertyValueFactory<>("id"));
+        colNome.setCellValueFactory(new PropertyValueFactory<>("nome"));
+        colCpf.setCellValueFactory(new PropertyValueFactory<>("cpf"));
+        colCnpj.setCellValueFactory(new PropertyValueFactory<>("cnpj"));
+        colEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
+        colStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
 
-	@FXML
-	private TableColumn<ClienteModel, String> colStatus;
-	
-	@FXML
-	private TableView<VendaModel> tabHistorico;
+        colData.setCellValueFactory(new PropertyValueFactory<>("data"));
+        colTotal.setCellValueFactory(new PropertyValueFactory<>("total"));
 
-	@FXML
-	private TableColumn<VendaModel, String> colData;
+        // limita CPF e CNPJ
+        txtCpf.setTextFormatter(new TextFormatter<>(c -> c.getControlNewText().length() <= 11 ? c : null));
+        txtCnpj.setTextFormatter(new TextFormatter<>(c -> c.getControlNewText().length() <= 14 ? c : null));
 
-	@FXML
-	private TableColumn<VendaModel, Double> colTotal;
+        carregarClientes();
+        
+        tabClientes.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, cliente) -> {
 
-	@FXML
-	private TextField txtBuscar;
+            if (cliente != null) {
 
-	@FXML
-	private TextField txtCpf;
-	
-	@FXML
-	private TextField txtCnpj;
+                tabHistorico.setItems(
+                    FXCollections.observableArrayList(
+                        vendaDAO.ultimasCompras(cliente.getId())
+                    )
+                );
 
-	@FXML
-	private TextField txtEmail;
+            } else {
+                tabHistorico.getItems().clear();
+            }
+        });
+    }
 
-	@FXML
-	private TextField txtNome;
+    @FXML
+    void buscarCliente(ActionEvent event) {
+        tabClientes.setItems(FXCollections.observableArrayList(clienteDAO.buscar(txtBuscar.getText())));
+    }
 
-	private ClienteDAO clienteDAO = new ClienteDAO();
-	private VendaDAO vendaDAO = new VendaDAO();
+    @FXML
+    void excluirCliente(ActionEvent event) {
+        ClienteModel c = tabClientes.getSelectionModel().getSelectedItem();
 
-	private ObservableList<ClienteModel> listaClientes = FXCollections.observableArrayList();
+        if (c != null) {
+            clienteDAO.excluir(c.getId());
+            carregarClientes();
+        }
+    }
 
-	@FXML
-	public void initialize() {
-	    cbStatus.getItems().addAll("Ativo", "Inativo");
+    private void limparCampos() {
+        txtNome.clear();
+        txtCpf.clear();
+        txtCnpj.clear();
+        txtEmail.clear();
+        cbStatus.setValue(null);
+    }
 
-	    colId.setCellValueFactory(new PropertyValueFactory<>("id"));
-	    colNome.setCellValueFactory(new PropertyValueFactory<>("nome"));
-	    colCpf.setCellValueFactory(new PropertyValueFactory<>("cpf"));
-	    colCnpj.setCellValueFactory(new PropertyValueFactory<>("cnpj"));
-	    colEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
-	    colStatus.setCellValueFactory(new PropertyValueFactory<>("status"));
+    private void carregarClientes() {
+        ObservableList<ClienteModel> lista = FXCollections.observableArrayList(clienteDAO.listar());
+        tabClientes.setItems(lista);
+    }
 
-	    colData.setCellValueFactory(new PropertyValueFactory<>("data"));
-	    colTotal.setCellValueFactory(new PropertyValueFactory<>("total"));
+    @FXML
+    void salvarCliente(ActionEvent event) {
 
-	    txtNome.setOnAction(e -> txtCpf.requestFocus());
-	    txtCpf.setOnAction(e -> txtCnpj.requestFocus());
-	    txtCnpj.setOnAction(e -> txtEmail.requestFocus());
-	    txtEmail.setOnAction(e -> salvarCliente(e));
-	    txtBuscar.setOnAction(e -> buscarCliente(e));
+        String nome = txtNome.getText();
+        String cpf = txtCpf.getText();
+        String cnpj = txtCnpj.getText();
+        String email = txtEmail.getText();
 
-	    tabClientes.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, cliente) -> {
+        // validação geral
+        if (!validarCliente(nome, cpf, cnpj, email)) return;
 
-	        if(cliente != null){
-	            tabHistorico.setItems(
-	                FXCollections.observableArrayList(
-	                    vendaDAO.ultimasCompras(cliente.getId())
-	                )
-	            );
-	        } else {
-	            tabHistorico.getItems().clear();
-	        }
-	    });
+        // valida CPF real
+        if (!cpfValido(cpf)) {
+            alert("CPF inválido!");
+            return;
+        }
 
-	    carregarClientes(); 
-	}
+        // valida CNPJ (se preenchido)
+        if (!cnpj.isEmpty() && !cnpjValido(cnpj)) {
+            alert("CNPJ inválido!");
+            return;
+        }
 
-	@FXML
-	void buscarCliente(ActionEvent event) {
+        // duplicidade
+        if (clienteDAO.existeCpf(cpf)) {
+            alert("CPF já cadastrado!");
+            return;
+        }
 
-		tabClientes.setItems(FXCollections.observableArrayList(clienteDAO.buscar(txtBuscar.getText())));
-		
-	}
+        if (!cnpj.isEmpty() && clienteDAO.existeCnpj(cnpj)) {
+            alert("CNPJ já cadastrado!");
+            return;
+        }
 
-	@FXML
-	void excluirCliente(ActionEvent event) {
+        ClienteModel c = new ClienteModel(
+                nome,
+                cpf,
+                cnpj,
+                email,
+                cbStatus.getValue()
+        );
 
-		ClienteModel c = tabClientes.getSelectionModel().getSelectedItem();
+        clienteDAO.inserir(c);
 
-		if (c != null) {
-			clienteDAO.excluir(c.getId());
-			carregarClientes();
-		}
-	}
+        carregarClientes();
+        limparCampos();
 
-	private void limparCampos() {
-		txtNome.clear();
-		txtCpf.clear();
-		txtCnpj.clear();
-		txtEmail.clear();
-		cbStatus.setValue(null);
-	}
+        alert("Cliente cadastrado com sucesso!");
+    }
 
-	/*private void carregarClientes() {
+    // ================== VALIDAÇÕES ==================
 
-		tabClientes.setItems(FXCollections.observableArrayList(clienteDAO.listar()));
-	}*/
-	
-	private void carregarClientes() {
+    private boolean validarCliente(String nome, String cpf, String cnpj, String email) {
 
-	    ObservableList<ClienteModel> lista =
-	        FXCollections.observableArrayList(clienteDAO.listar());
+        if (nome.length() < 3 || !nome.matches("[a-zA-Z ]+")) {
+            alert("Nome inválido!");
+            return false;
+        }
 
-	    tabClientes.setItems(lista);
+        if (!cpf.matches("\\d{11}")) {
+            alert("CPF deve ter 11 números!");
+            return false;
+        }
 
-	    if (!lista.isEmpty()) {
-	        tabClientes.getSelectionModel().selectFirst();
-	    } else {
-	        tabHistorico.getItems().clear();
-	    }
-	}
+        if (!cnpj.isEmpty() && !cnpj.matches("\\d{14}")) {
+            alert("CNPJ deve ter 14 números!");
+            return false;
+        }
 
-	@FXML
-	void salvarCliente(ActionEvent event) {
+        if (!email.matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
+            alert("Email inválido!");
+            return false;
+        }
 
-		if (txtNome.getText().isEmpty() || txtCpf.getText().isEmpty()) {
-			alert("Preencha os campos obrigatórios!");
-			return;
-		}
+        if (cbStatus.getValue() == null) {
+            alert("Selecione o status!");
+            return false;
+        }
 
-		if (clienteDAO.existeCpf(txtCpf.getText())) {
-			alert("CPF já cadastrado!");
-			return;
-		}
-		
-		if (clienteDAO.existeCnpj(txtCnpj.getText())) {
-			alert("CNPJ já cadastrado!");
-			return;
-		}
+        return true;
+    }
 
-		ClienteModel c = new ClienteModel(txtNome.getText(), txtCpf.getText(), txtCnpj.getText(), txtEmail.getText(), cbStatus.getValue());
+    private boolean cpfValido(String cpf) {
 
-		clienteDAO.inserir(c);
+        cpf = cpf.replaceAll("\\D", "");
 
-		carregarClientes();
-		limparCampos();
-	}
+        if (cpf.length() != 11) return false;
 
-	private void alert(String mensagem) {
-		Alert alert = new Alert(Alert.AlertType.WARNING);
-		alert.setTitle("Aviso");
-		alert.setHeaderText(null);
-		alert.setContentText(mensagem);
-		alert.showAndWait();
-	}
+        // bloqueia 11111111111
+        if (cpf.matches("(\\d)\\1{10}")) return false;
 
+        try {
+            int soma = 0, peso = 10;
+
+            for (int i = 0; i < 9; i++)
+                soma += (cpf.charAt(i) - '0') * peso--;
+
+            int dig1 = 11 - (soma % 11);
+            if (dig1 >= 10) dig1 = 0;
+
+            soma = 0;
+            peso = 11;
+
+            for (int i = 0; i < 10; i++)
+                soma += (cpf.charAt(i) - '0') * peso--;
+
+            int dig2 = 11 - (soma % 11);
+            if (dig2 >= 10) dig2 = 0;
+
+            return dig1 == (cpf.charAt(9) - '0') &&
+                   dig2 == (cpf.charAt(10) - '0');
+
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    private boolean cnpjValido(String cnpj) {
+
+        cnpj = cnpj.replaceAll("\\D", "");
+
+        if (cnpj.length() != 14) return false;
+
+        if (cnpj.matches("(\\d)\\1{13}")) return false;
+
+        try {
+            int[] peso1 = {5,4,3,2,9,8,7,6,5,4,3,2};
+            int[] peso2 = {6,5,4,3,2,9,8,7,6,5,4,3,2};
+
+            int soma = 0;
+
+            for (int i = 0; i < 12; i++)
+                soma += (cnpj.charAt(i) - '0') * peso1[i];
+
+            int dig1 = soma % 11 < 2 ? 0 : 11 - (soma % 11);
+
+            soma = 0;
+
+            for (int i = 0; i < 13; i++)
+                soma += (cnpj.charAt(i) - '0') * peso2[i];
+
+            int dig2 = soma % 11 < 2 ? 0 : 11 - (soma % 11);
+
+            return dig1 == (cnpj.charAt(12) - '0') &&
+                   dig2 == (cnpj.charAt(13) - '0');
+
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    private void alert(String msg) {
+        Alert a = new Alert(Alert.AlertType.WARNING);
+        a.setContentText(msg);
+        a.showAndWait();
+    }
 }

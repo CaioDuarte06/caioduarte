@@ -79,6 +79,7 @@ USE Sistema;
 
 O sistema é composto pelas seguintes tabelas:
 
+
 📦 produto
 
 Armazena os produtos disponíveis para venda.
@@ -93,6 +94,7 @@ quantidade	INT	Estoque atual
 estoque_minimo	INT	Quantidade mínima
 codigo_barras	VARCHAR(50)	Código único
 
+
 🔄 movimentacaoEstoque
 
 Controla entrada e saída de produtos.
@@ -103,6 +105,7 @@ idProd	INT	Produto
 dataHora	DATETIME	Data/hora
 quantidade	INT	Quantidade
 tipo	INT	0 = Entrada / 1 = Saída
+
 
 📝 historico
 
@@ -116,6 +119,7 @@ quantidade	INT	Quantidade
 data	DATETIME	Data
 usuario	VARCHAR(100)	Usuário responsável
 
+
 👤 usuario
 
 Armazena os usuários do sistema.
@@ -127,6 +131,7 @@ cpf	VARCHAR(11)	CPF único
 email	VARCHAR(100)	Email
 senha	VARCHAR(50)	Senha
 cargo	VARCHAR(50)	Função
+
 
 👥 clientes
 
@@ -140,6 +145,7 @@ cnpj	VARCHAR(18)	CNPJ
 email	VARCHAR(100)	Email
 status	VARCHAR(10)	Ativo/Inativo
 
+
 💰 vendas
 
 Registra as vendas realizadas.
@@ -151,6 +157,7 @@ data	DATETIME	Data da venda
 total	DECIMAL(10,2)	Total da venda
 desconto	DECIMAL(10,2)	Desconto aplicado
 usuario	VARCHAR(100)	Usuário responsável
+
 
 🧾 item_venda
 
@@ -164,6 +171,7 @@ quantidade	INT	Quantidade
 preco_unitario	DECIMAL(10,2)	Preço unitário
 subtotal	DECIMAL(10,2)	Total do item
 
+
 💳 pagamento
 
 Registra os pagamentos das vendas.
@@ -174,6 +182,7 @@ venda_id	INT	Venda
 tipo	VARCHAR(50)	Dinheiro, Cartão, Pix
 valor	DECIMAL(10,2)	Valor pago
 
+
 🔗 Relacionamentos
 produto → movimentacaoEstoque
 produto → item_venda
@@ -181,12 +190,14 @@ vendas → item_venda
 vendas → pagamento
 clientes → vendas
 
+
 🔁 Regras do Sistema
 Ao realizar uma venda:
 Um registro é criado em vendas
 Os produtos são inseridos em item_venda
 O pagamento é registrado em pagamento
 O estoque é atualizado em movimentacaoEstoque
+
 
 📌 Observações
 O sistema suporta múltiplos métodos de pagamento
